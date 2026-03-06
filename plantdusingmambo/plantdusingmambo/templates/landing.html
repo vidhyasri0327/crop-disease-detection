@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriCare | Mamba-YOLO Plant Disease Detection</title>
+    <meta name="description"
+        content="Advanced plant disease detection using Mamba-YOLO deep learning architecture. Get instant analysis and remedies.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">🌿 AgriCare</div>
+        <a href="/login" class="btn btn-primary">Launch App →</a>
+    </nav>
+
+    <div class="hero">
+        <div class="container" style="position: relative; z-index: 1;">
+            <div style="font-size: 5rem; margin-bottom: 1rem;">🌱</div>
+            <h1>Bilingual Plant Disease<br>Detection & Medicine Recommendations</h1>
+           
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="/login" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    🚀 Start Diagnosis
+                </a>
+                <a href="#features" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    Learn More ↓
+                </a>
+            </div>
+
+            <div style="margin-top: 4rem; display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">🧬</span>
+                    <span class="hero-stat-label">Mamba SSM</span>
+                    <span class="hero-stat-desc">Linear Attention</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">⚡</span>
+                    <span class="hero-stat-label">YOLO v8</span>
+                    <span class="hero-stat-desc">Real-time Speed</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">🔒</span>
+                    <span class="hero-stat-label">Flask Core</span>
+                    <span class="hero-stat-desc">Secure Backend</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="features" style="padding: 6rem 2rem; background: #050505;">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">
+                How It <span style="color: var(--primary);">Works</span>
+            </h2>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📸</div>
+                    <h3>Upload or Scan</h3>
+                    <p>Take a photo of the affected plant or upload an existing image for analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔬</div>
+                    <h3>AI Analysis</h3>
+                    <p>Our Mamba-YOLO model processes the image and identifies diseases with high accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💊</div>
+                    <h3>Get Remedies</h3>
+                    <p>Receive detailed disease information and recommended treatment protocols.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section
+        style="padding: 4rem 2rem; text-align: center; background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);">
+        <div class="container">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">Ready to protect your plants?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Start using AgriCare today - completely free.
+            </p>
+            <a href="/signup" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+                Create Free Account →
+            </a>
+        </div>
+    </section>
+
+    <footer style="padding: 2rem; text-align: center; border-top: 1px solid var(--border);">
+        <p style="color: var(--text-muted);">© 2025 AgriCare. Powered by Mamba-YOLO Architecture.</p>
+    </footer>
+
+    <style>
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            display: block;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-label {
+            display: block;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .hero-stat-desc {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+    </style>
+</body>
+
+</html>

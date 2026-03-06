@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AgriCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">🌿 AgriCare</div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link active" data-en="Analyze" data-ta="பகுப்பாய்வு">Analyze</a>
+            <a href="/history" class="nav-link" data-en="History" data-ta="வரலாறு">History</a>
+            <a href="/orders" class="nav-link" data-en="Orders" data-ta="ஆர்டர்கள்">Orders</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="lang-en" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" id="lang-ta" onclick="setLanguage('ta')">தமிழ்</button>
+            </div>
+            <div class="user-badge">{{ user }}</div>
+            <a href="/logout" class="btn btn-danger" data-en="Logout" data-ta="வெளியேறு">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 6rem;">
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">🌿</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-scans">--</span>
+                    <span class="stat-label">Total Scans</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔬</div>
+                <div class="stat-info">
+                    <span class="stat-value">Mamba-YOLO</span>
+                    <span class="stat-label">Active Model</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <span class="stat-value">v2.5</span>
+                    <span class="stat-label">Engine Version</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="glass-card">
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tab-upload" onclick="setMode('upload')">
+                    <span class="tab-icon">📁</span> Upload Image
+                </button>
+                <button class="tab-btn" id="tab-scan" onclick="setMode('scan')">
+                    <span class="tab-icon">📷</span> Live Scan
+                </button>
+            </div>
+
+            <div id="upload-mode">
+                <div class="upload-area" id="drop-zone">
+                    <div class="upload-icon">🌱</div>
+                    <p class="upload-text">Drop plant image here</p>
+                    <p class="upload-hint">or click to browse files</p>
+                    <input type="file" id="file-input" hidden accept="image/*">
+                </div>
+            </div>
+
+            <div id="scan-mode" style="display: none; text-align: center;">
+                <div class="video-container" id="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <div class="scan-overlay"></div>
+                </div>
+                <button class="btn btn-primary" id="capture-btn" style="margin-top: 1rem; display: none;">
+                    📸 Capture & Analyze
+                </button>
+                <button class="btn btn-secondary" id="start-cam-btn" onclick="startCamera()">
+                    🎥 Initialize Camera
+                </button>
+            </div>
+
+            <div class="loader" id="loader"></div>
+
+            <div class="results" id="results">
+                <div class="result-header">
+                    <h3 data-en="🔬 Analysis Report" data-ta="🔬 பகுப்பாய்வு அறிக்கை">🔬 Analysis Report</h3>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="lang-toggle">
+                            <button class="lang-btn active" id="result-lang-en" onclick="setLanguage('en')">EN</button>
+                            <button class="lang-btn" id="result-lang-ta" onclick="setLanguage('ta')">தமிழ்</button>
+                        </div>
+                        <span class="result-badge">Mamba-YOLO</span>
+                    </div>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-image-section">
+                        <img id="result-img" src="" alt="Analyzed Image">
+                    </div>
+
+                    <div class="result-data-section">
+                        <div class="result-card">
+                            <div class="disease-header">
+                                <h2 id="d-name">Unknown</h2>
+                                <span id="d-conf" class="confidence-badge">99.8%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="conf-fill"></div>
+                            </div>
+                            <p id="d-desc" class="disease-desc">Analysis pending...</p>
+                        </div>
+
+                        <div class="remedies-card">
+                            <h4 data-en="💊 Suggested Remedies" data-ta="💊 பரிந்துரைக்கப்பட்ட தீர்வுகள்">💊 Suggested
+                                Remedies</h4>
+                            <ul id="d-remedies"></ul>
+                            <button class="btn btn-primary" id="buy-remedy-btn" onclick="openOrderModal()"
+                                style="margin-top: 1rem; width: 100%;" data-en="🛒 Buy Recommended Medicine"
+                                data-ta="🛒 மருந்து வாங்கு">
+                                🛒 Buy Recommended Medicine
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="resetAnalysis()" style="margin-top: 1.5rem;"
+                    data-en="🔄 New Analysis" data-ta="🔄 புதிய பகுப்பாய்வு">
+                    🔄 New Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="order-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🛒 Order Medicine</h3>
+                <button class="modal-close" onclick="closeOrderModal()">×</button>
+            </div>
+            <form id="order-form" onsubmit="submitOrder(event)">
+                <div class="order-summary" id="order-summary"></div>
+
+                <div class="form-section">
+                    <h4>📦 Delivery Details</h4>
+                    <input type="text" name="fullName" placeholder="Full Name" required>
+                    <input type="tel" name="phone" placeholder="Phone Number" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <textarea name="address" placeholder="Delivery Address" rows="3" required></textarea>
+                    <input type="text" name="pincode" placeholder="Pincode" required>
+                </div>
+
+                <div class="form-section">
+                    <h4>💳 Payment Method</h4>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="cod" checked> Cash on Delivery
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="upi"> UPI Payment
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="card"> Card Payment
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bill-summary">
+                    <div class="bill-row"><span>Subtotal</span><span id="bill-subtotal">₹0</span></div>
+                    <div class="bill-row"><span>Delivery</span><span>₹50</span></div>
+                    <div class="bill-row"><span>Tax (18%)</span><span id="bill-tax">₹0</span></div>
+                    <div class="bill-row total"><span>Total</span><span id="bill-total">₹0</span></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    ✅ Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="success-modal" style="display: none;">
+        <div class="modal-content success-content">
+            <div class="success-icon">✅</div>
+            <h2 data-en="Order Placed Successfully!" data-ta="ஆர்டர் வெற்றிகரமாக வைக்கப்பட்டது!">Order Placed
+                Successfully!</h2>
+            <p data-en="Your order has been confirmed and will be delivered soon."
+                data-ta="உங்கள் ஆர்டர் உறுதிசெய்யப்பட்டது, விரைவில் டெலிவரி செய்யப்படும்.">Your order has been confirmed
+                and will be delivered soon.</p>
+            <div class="order-id">Order ID: <span id="order-id-display"></span></div>
+            <button class="btn btn-primary" onclick="showFeedbackModal()" data-en="Give Feedback"
+                data-ta="கருத்து தெரிவிக்க">Give Feedback</button>
+            <button class="btn btn-secondary" onclick="closeSuccessModal()" style="margin-top: 0.5rem;" data-en="Skip"
+                data-ta="தவிர்">Skip</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="feedback-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-en="📝 Share Your Feedback" data-ta="📝 உங்கள் கருத்தைப் பகிரவும்">📝 Share Your Feedback</h3>
+                <button class="modal-close" onclick="closeFeedbackModal()">×</button>
+            </div>
+            <form id="feedback-form" onsubmit="submitFeedback(event)">
+                <div class="form-section">
+                    <h4 data-en="Rate your experience" data-ta="உங்கள் அனுபவத்தை மதிப்பிடுங்கள்">Rate your experience
+                    </h4>
+                    <div class="star-rating">
+                        <span class="star" data-rating="1" onclick="setRating(1)">★</span>
+                        <span class="star" data-rating="2" onclick="setRating(2)">★</span>
+                        <span class="star" data-rating="3" onclick="setRating(3)">★</span>
+                        <span class="star" data-rating="4" onclick="setRating(4)">★</span>
+                        <span class="star" data-rating="5" onclick="setRating(5)">★</span>
+                    </div>
+                    <input type="hidden" name="rating" id="rating-input" value="0">
+                </div>
+
+                <div class="form-section">
+                    <h4 data-en="How was the disease detection?" data-ta="நோய் கண்டறிதல் எப்படி இருந்தது?">How was the
+                        disease detection?</h4>
+                    <div class="feedback-options">
+                        <label class="feedback-option">
+                            <input type="radio" name="detection_quality" value="accurate" checked>
+                            <span data-en="Very Accurate" data-ta="மிகவும் துல்லியமானது">Very Accurate</span>
+                        </label>
+                        <label class="feedback-option">
+                            <input type="radio" name="detection_quality" value="good">
+                            <span data-en="Good" data-ta="நல்லது">Good</span>
+                        </label>
+                        <label class="feedback-option">
+                            <input type="radio" name="detection_quality" value="needs_improvement">
+                            <span data-en="Needs Improvement" data-ta="மேம்படுத்த வேண்டும்">Needs Improvement</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 data-en="Additional Comments" data-ta="கூடுதல் கருத்துகள்">Additional Comments</h4>
+                    <textarea name="comments" placeholder="Share your thoughts..." rows="3"
+                        data-placeholder-en="Share your thoughts..."
+                        data-placeholder-ta="உங்கள் எண்ணங்களைப் பகிரவும்..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;" data-en="Submit Feedback"
+                    data-ta="கருத்தை சமர்ப்பிக்கவும்">
+                    Submit Feedback
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | AgriCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">🌿 AgriCare</div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link" data-en="Analyze" data-ta="பகுப்பாய்வு">Analyze</a>
+            <a href="/history" class="nav-link" data-en="History" data-ta="வரலாறு">History</a>
+            <a href="/orders" class="nav-link active" data-en="Orders" data-ta="ஆர்டர்கள்">Orders</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="lang-en" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" id="lang-ta" onclick="setLanguage('ta')">தமிழ்</button>
+            </div>
+            <div class="user-badge">{{ user }}</div>
+            <a href="/logout" class="btn btn-danger" data-en="Logout" data-ta="வெளியேறு">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 6rem;">
+        <div class="page-header">
+            <h1 data-en="📦 My Orders" data-ta="📦 எனது ஆர்டர்கள்">📦 My Orders</h1>
+            <p data-en="Track your medicine orders" data-ta="உங்கள் மருந்து ஆர்டர்களைக் கண்காணிக்கவும்">Track your
+                medicine orders</p>
+        </div>
+
+        <div id="orders-container">
+            <div class="loader" id="loader" style="display: block;"></div>
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-icon">📦</div>
+            <h3 data-en="No orders yet" data-ta="இதுவரை ஆர்டர்கள் இல்லை">No orders yet</h3>
+            <p data-en="Order medicine after disease analysis"
+                data-ta="நோய் பகுப்பாய்வுக்குப் பிறகு மருந்து ஆர்டர் செய்யுங்கள்">Order medicine after disease analysis
+            </p>
+            <a href="/dashboard" class="btn btn-primary" data-en="Start Analysis" data-ta="பகுப்பாய்வைத் தொடங்கு">Start
+                Analysis</a>
+        </div>
+    </div>
+
+    <style>
+        .order-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-id-tag {
+            font-family: monospace;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .order-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .order-status.confirmed {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--primary);
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-group h4 {
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+        }
+
+        .detail-group p {
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .order-items {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .order-items h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .order-items ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .order-items li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-items li:last-child {
+            border-bottom: none;
+        }
+
+        .order-total {
+            margin-top: 1rem;
+            text-align: right;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+    </style>
+
+    <script>
+        let currentLang = 'en';
+
+        const labels = {
+            en: {
+                customer: 'Customer',
+                phone: 'Phone',
+                email: 'Email',
+                payment: 'Payment',
+                deliveryAddress: 'Delivery Address',
+                disease: 'Disease',
+                total: 'Total'
+            },
+            ta: {
+                customer: 'வாடிக்கையாளர்',
+                phone: 'தொலைபேசி',
+                email: 'மின்னஞ்சல்',
+                payment: 'பணம் செலுத்துதல்',
+                deliveryAddress: 'டெலிவரி முகவரி',
+                disease: 'நோய்',
+                total: 'மொத்தம்'
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-ta').classList.toggle('active', lang === 'ta');
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerText = el.dataset[lang] || el.dataset.en;
+            });
+
+            fetch('/api/set-lang/' + lang);
+            loadOrders();
+        }
+
+        async function loadOrders() {
+            const container = document.getElementById('orders-container');
+            const loader = document.getElementById('loader');
+            const empty = document.getElementById('empty-state');
+            const l = labels[currentLang];
+
+            try {
+                const res = await fetch('/api/orders');
+                const orders = await res.json();
+
+                loader.style.display = 'none';
+
+                if (orders.length === 0) {
+                    empty.style.display = 'block';
+                    return;
+                }
+
+                container.innerHTML = orders.map(o => `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <span class="order-id-tag">${o.id}</span>
+                                <p style="margin-top: 0.5rem; color: #888; font-size: 0.85rem;">
+                                    ${new Date(o.timestamp).toLocaleString()}
+                                </p>
+                            </div>
+                            <span class="order-status ${o.status}">${o.status.toUpperCase()}</span>
+                        </div>
+                        <div class="order-details">
+                            <div class="detail-group">
+                                <h4>${l.customer}</h4>
+                                <p>${o.customer.name}</p>
+                            </div>
+                            <div class="detail-group">
+                                <h4>${l.phone}</h4>
+                                <p>${o.customer.phone}</p>
+                            </div>
+                            <div class="detail-group">
+                                <h4>${l.email}</h4>
+                                <p>${o.customer.email}</p>
+                            </div>
+                            <div class="detail-group">
+                                <h4>${l.payment}</h4>
+                                <p>${o.payment.toUpperCase()}</p>
+                            </div>
+                        </div>
+                        <div class="detail-group" style="margin-top: 1rem;">
+                            <h4>${l.deliveryAddress}</h4>
+                            <p>${o.customer.address}, ${o.customer.pincode}</p>
+                        </div>
+                        <div class="order-items">
+                            <h4>${l.disease}: ${o.disease}</h4>
+                            <ul>
+                                ${o.remedies.map(r => `<li>💊 ${r}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="order-total">${l.total}: ${o.total}</div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                loader.style.display = 'none';
+                container.innerHTML = '<p style="color: #888;">Failed to load orders</p>';
+            }
+        }
+
+        async function initLang() {
+            try {
+                const res = await fetch('/api/get-lang');
+                const data = await res.json();
+                if (data.lang) setLanguage(data.lang);
+            } catch (e) { }
+        }
+
+        initLang();
+        loadOrders();
+    </script>
+</body>
+
+</html>

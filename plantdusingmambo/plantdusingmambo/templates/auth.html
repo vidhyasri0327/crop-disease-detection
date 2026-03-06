@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if mode == 'signup' %}Sign Up{% else %}Login{% endif %} | AgriCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="glass-card auth-box">
+            <div style="display: flex; margin-bottom: 2rem; border-bottom: 1px solid var(--border);">
+                <a href="/login" class="auth-tab {% if mode != 'signup' %}active{% endif %}">Login</a>
+                <a href="/signup" class="auth-tab {% if mode == 'signup' %}active{% endif %}">Sign Up</a>
+            </div>
+
+            {% if error %}
+            <div
+                style="background: rgba(255, 50, 50, 0.2); padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                <label style="display: block; margin-bottom: 0.5rem; color: #888;">Username</label>
+                <input type="text" name="username" placeholder="Enter username" required>
+
+                <label style="display: block; margin-bottom: 0.5rem; color: #888;">Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+
+                {% if mode == 'signup' %}
+                <label style="display: block; margin-bottom: 0.5rem; color: #888;">Confirm Password</label>
+                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    {% if mode == 'signup' %}Create Account{% else %}Login{% endif %}
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; color: #666; font-size: 0.9rem;">
+                {% if mode == 'signup' %}
+                Already have an account? <a href="/login" style="color: var(--primary);">Login here</a>
+                {% else %}
+                New user? <a href="/signup" style="color: var(--primary);">Create account</a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

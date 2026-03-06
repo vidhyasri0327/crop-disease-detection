@@ -1,0 +1,127 @@
+[
+  {
+    "id": "ORD1765988373607",
+    "disease": "Rice Blast",
+    "remedies": [
+      "Plant resistant rice varieties.",
+      "Apply appropriate fungicides (e.g., tricyclazole, azoxystrobin, trifloxystrobin) preventatively or upon early symptom detection.",
+      "Manage nitrogen fertilizer application to avoid excessive levels, which can increase susceptibility.",
+      "Remove and destroy infected plant debris to reduce inoculum sources.",
+      "Optimize water management and planting density to reduce leaf wetness and improve air circulation."
+    ],
+    "customer": {
+      "name": "test",
+      "phone": "1234567890",
+      "email": "asdfg@ash.con",
+      "address": "SADF",
+      "pincode": "1234"
+    },
+    "payment": "upi",
+    "subtotal": "\u20b91250",
+    "tax": "\u20b9225",
+    "total": "\u20b91525",
+    "status": "confirmed",
+    "timestamp": "2025-12-17T16:19:33.607Z",
+    "user": "test"
+  },
+  {
+    "id": "ORD1765993394749",
+    "disease": "Rice Blast",
+    "remedies": [
+      "Plant resistant rice varieties.",
+      "Optimize nitrogen fertilizer application; avoid excessive nitrogen that can promote disease.",
+      "Manage water levels to avoid prolonged periods of leaf wetness.",
+      "Apply appropriate fungicides (e.g., tricyclazole, azoxystrobin, strobilurins) as per local agricultural guidelines and disease severity.",
+      "Remove and destroy infected plant debris after harvest to reduce fungal inoculum."
+    ],
+    "customer": {
+      "name": "test",
+      "phone": "1234567890",
+      "email": "asdfg@ash.con",
+      "address": "as",
+      "pincode": "123"
+    },
+    "payment": "upi",
+    "subtotal": "\u20b91250",
+    "tax": "\u20b9225",
+    "total": "\u20b91525",
+    "status": "confirmed",
+    "timestamp": "2025-12-17T17:43:14.749Z",
+    "user": "test"
+  },
+  {
+    "id": "ORD1772616237775",
+    "disease": "Black Spot Disease",
+    "remedies": [
+      "Remove and destroy infected leaves and stems immediately to prevent spread.",
+      "Ensure good air circulation around the plants by proper spacing and pruning.",
+      "Water plants at the base early in the day to allow foliage to dry quickly, avoiding overhead watering.",
+      "Apply a fungicide specifically labeled for black spot, such as those containing chlorothalonil, propiconazole, or myclobutanil, following product instructions.",
+      "Consider planting disease-resistant rose varieties to prevent future infections."
+    ],
+    "customer": {
+      "name": "arun",
+      "phone": "23563444354",
+      "email": "tharun@gmail.com",
+      "address": "coimbatore",
+      "pincode": "631042"
+    },
+    "payment": "cod",
+    "subtotal": "\u20b91250",
+    "tax": "\u20b9225",
+    "total": "\u20b91525",
+    "status": "confirmed",
+    "timestamp": "2026-03-04T09:23:57.775Z",
+    "user": "tharun"
+  },
+  {
+    "id": "ORD1772618328106",
+    "disease": "Powdery Mildew",
+    "remedies": [
+      "Remove and destroy infected plant parts to prevent the spread of spores.",
+      "Apply a fungicide such as neem oil, potassium bicarbonate, or sulfur-based sprays according to product instructions.",
+      "Improve air circulation around plants by proper spacing and pruning.",
+      "Water plants at the base early in the day to keep foliage dry and reduce humidity.",
+      "Consider planting disease-resistant varieties if available for future plantings."
+    ],
+    "customer": {
+      "name": "vidhyasri",
+      "phone": "1234567890",
+      "email": "vidhya@gmail.com",
+      "address": "abc coimbatore 107",
+      "pincode": "631042"
+    },
+    "payment": "cod",
+    "subtotal": "\u20b91250",
+    "tax": "\u20b9225",
+    "total": "\u20b91525",
+    "status": "confirmed",
+    "timestamp": "2026-03-04T09:58:48.106Z",
+    "user": "vidhyasri"
+  },
+  {
+    "id": "ORD1772636775497",
+    "disease": "Black Spot",
+    "remedies": [
+      "Promptly remove and destroy all infected leaves from the plant and the surrounding ground to reduce fungal inoculum.",
+      "Improve air circulation around the plant by careful pruning.",
+      "Water plants at the base in the morning to allow foliage to dry thoroughly throughout the day, avoiding overhead watering.",
+      "Apply an appropriate fungicide labeled for Black Spot, following the manufacturer's instructions, especially during periods of high humidity.",
+      "Consider planting disease-resistant varieties in the future."
+    ],
+    "customer": {
+      "name": "vidhyasri",
+      "phone": "1234567890",
+      "email": "vidhya@gmail.com",
+      "address": "coimbatore 32",
+      "pincode": "631042"
+    },
+    "payment": "upi",
+    "subtotal": "\u20b91250",
+    "tax": "\u20b9225",
+    "total": "\u20b91525",
+    "status": "confirmed",
+    "timestamp": "2026-03-04T15:06:15.497Z",
+    "user": "vidhyasri"
+  }
+]

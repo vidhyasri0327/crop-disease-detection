@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History | AgriCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">🌿 AgriCare</div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link" data-en="Analyze" data-ta="பகுப்பாய்வு">Analyze</a>
+            <a href="/history" class="nav-link active" data-en="History" data-ta="வரலாறு">History</a>
+            <a href="/orders" class="nav-link" data-en="Orders" data-ta="ஆர்டர்கள்">Orders</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="lang-en" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" id="lang-ta" onclick="setLanguage('ta')">தமிழ்</button>
+            </div>
+            <div class="user-badge">{{ user }}</div>
+            <a href="/logout" class="btn btn-danger" data-en="Logout" data-ta="வெளியேறு">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 6rem;">
+        <div class="page-header">
+            <h1 data-en="📋 Analysis History" data-ta="📋 பகுப்பாய்வு வரலாறு">📋 Analysis History</h1>
+            <p data-en="Your recent plant disease detection results"
+                data-ta="உங்கள் சமீபத்திய தாவர நோய் கண்டறிதல் முடிவுகள்">Your recent plant disease detection results</p>
+        </div>
+
+        <div class="history-grid" id="history-grid">
+            <div class="loader" id="loader" style="display: block;"></div>
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-icon">🌿</div>
+            <h3 data-en="No analyses yet" data-ta="இதுவரை பகுப்பாய்வுகள் இல்லை">No analyses yet</h3>
+            <p data-en="Start by analyzing a plant image"
+                data-ta="தாவரப் படத்தை பகுப்பாய்வு செய்வதன் மூலம் தொடங்குங்கள்">Start by analyzing a plant image</p>
+            <a href="/dashboard" class="btn btn-primary" data-en="Start Analysis" data-ta="பகுப்பாய்வைத் தொடங்கு">Start
+                Analysis</a>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+
+        const translations = {
+            en: { confidence: 'confidence' },
+            ta: { confidence: 'நம்பகத்தன்மை' }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-ta').classList.toggle('active', lang === 'ta');
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerText = el.dataset[lang] || el.dataset.en;
+            });
+
+            fetch('/api/set-lang/' + lang);
+            loadHistory();
+        }
+
+        async function loadHistory() {
+            const grid = document.getElementById('history-grid');
+            const loader = document.getElementById('loader');
+            const empty = document.getElementById('empty-state');
+
+            try {
+                const res = await fetch('/api/history');
+                const data = await res.json();
+
+                loader.style.display = 'none';
+
+                if (data.length === 0) {
+                    empty.style.display = 'block';
+                    return;
+                }
+
+                const confText = translations[currentLang].confidence;
+
+                grid.innerHTML = data.map(item => `
+                    <div class="history-card">
+                        <div class="history-img">
+                            <img src="/uploads/${item.image}" alt="Plant">
+                        </div>
+                        <div class="history-info">
+                            <div class="history-disease">${item.disease_name || 'Unknown'}</div>
+                            <div class="history-conf">${(item.confidence || 0).toFixed(1)}% ${confText}</div>
+                            <div class="history-time">${new Date(item.timestamp).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                loader.style.display = 'none';
+                grid.innerHTML = '<p style="color: #888;">Failed to load history</p>';
+            }
+        }
+
+        async function initLang() {
+            try {
+                const res = await fetch('/api/get-lang');
+                const data = await res.json();
+                if (data.lang) setLanguage(data.lang);
+            } catch (e) { }
+        }
+
+        initLang();
+        loadHistory();
+    </script>
+</body>
+
+</html>
