@@ -9,7 +9,7 @@ from PIL import Image
 class MambaInference:
     def __init__(self):
         self.k = os.getenv("GEMINI_API_KEY")
-        genai.configure(api_key="AlzaSyDJ_MDga0fcKdDio-7BKrt0KU6B3Bt2Xlk")
+        genai.configure(api_key="AIzaSyDJ_MDga0fcKdDio-7BKrt0KU6B3Bt2XIk")
         genai.configure(api_key=self.k)
         self.m = genai.GenerativeModel('gemini-1.5-flash')
     def forward(self, img_path, lang='en'):
