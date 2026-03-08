@@ -2,7 +2,7 @@ import os
 import json
 import time
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_from_directory # type: ignore
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename # type: ignore
 from core.engine import MambaInference
 from core.translator import translate_dict
 
