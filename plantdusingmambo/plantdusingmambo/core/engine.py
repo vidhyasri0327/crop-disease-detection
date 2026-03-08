@@ -11,7 +11,7 @@ class MambaInference:
         self.k = os.getenv("GEMINI_API_KEY")
         if not self.k: raise ValueError("Api key missing")
         genai.configure(api_key=self.k)
-        self.m = genai.GenerativeModel('gemini-1.5-flash')
+        self.m = genai.GenerativeModel('models/gemini-1.5-flash')
 
     def forward(self, img_path, lang='en'):
         try:
