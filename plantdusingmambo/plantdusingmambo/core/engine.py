@@ -8,7 +8,7 @@ from PIL import Image # type: ignore
 
 class MambaInference:
     def __init__(self):
-        genai.configure(api_key="AIzaSyDJ_MDga0fcKdDio-7BKrt0KU6B3Bt2XIk")
+        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
         model = genai.GenerativeModel("gemini-1.5-flash-latest")
     def forward(self, img_path, lang='en'):
         try:
