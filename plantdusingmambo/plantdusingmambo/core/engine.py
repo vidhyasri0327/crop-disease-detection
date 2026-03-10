@@ -1,15 +1,15 @@
 import os
 import json
 import re
-from dotenv import load_dotenv
+from dotenv import load_dotenv # type: ignore
 load_dotenv()
-import google.generativeai as genai
-from PIL import Image
+import google.generativeai as genai # type: ignore
+from PIL import Image # type: ignore
 
 class MambaInference:
     def __init__(self):
         genai.configure(api_key="AIzaSyDJ_MDga0fcKdDio-7BKrt0KU6B3Bt2XIk")
-        self.m = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
     def forward(self, img_path, lang='en'):
         try:
             img = Image.open(img_path)
