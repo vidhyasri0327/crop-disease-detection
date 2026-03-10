@@ -29,7 +29,7 @@ Format:
 
 If plant is healthy, set disease_name to "Healthy" and remedies to general care tips."""
 
-            res = self.m.generate_content([p, img])
+            res = self.model.generate_content([p, img])
             raw = res.text.strip()
             raw = re.sub(r'^```json\s*', '', raw)
             raw = re.sub(r'^```\s*', '', raw)

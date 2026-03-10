@@ -1,5 +1,5 @@
-import torch
-import torch.nn as nn
+import torch # type: ignore
+import torch.nn as nn # type: ignore
 
 def autopad(k, p=None):
     if p is None:
