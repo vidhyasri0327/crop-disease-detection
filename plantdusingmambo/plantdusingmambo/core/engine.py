@@ -8,8 +8,16 @@ from PIL import Image # type: ignore
 
 class MambaInference:
     def __init__(self):
+        # configure API key
         genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-        self.model = genai.GenerativeModel("gemini-1.5-flash-latest")
+        # allow overriding the model name via an environment variable
+        # default to a stable model that supports generate_content
+        model_name = os.getenv("GENAI_MODEL", "gemini-1.5")
+        # note: "gemini-1.5-flash-latest" and similar flash models may not be
+        # available for the v1beta generate_content endpoint, which was causing
+        # 404 errors in the history log.  Use list_models() at runtime if
+        # necessary to inspect available names.
+        self.model = genai.GenerativeModel(model_name)
     def forward(self, img_path, lang='en'):
         try:
             img = Image.open(img_path)
